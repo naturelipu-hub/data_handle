@@ -7,6 +7,8 @@ import pymrio
 import pandas as pd
 import numpy as np
 import os
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
@@ -69,7 +71,7 @@ def analyze_pm25_emissions(io):
     return em_pm25, F_pm25_total
 
 
-def plot_top_pm25(F_pm25_total, sectors, textile_core, top_n=20, outpath=None):
+def plot_top_pm25(F_pm25_total, sectors, textile_core, top_n=20, outpath=None): 
     """
     绘制 PM2.5 排放最多的前 N 项（区域-部门组合），并高亮纺织相关部门。
     返回保存的文件路径。
@@ -179,8 +181,13 @@ def main():
         
         # 4. 定义服装产业
         textile_idx, textile_core, textile_full = define_textile_industry(sectors)
-        
-        # 5. 基本信息汇总
+
+        # 5. 绘制 PM2.5 排名前N并高亮纺织部门
+        plot_path = plot_top_pm25(F_pm25_total, sectors, textile_core, top_n=20)
+        if plot_path:
+            print(f"图已保存到：{plot_path}")
+
+        # 6. 基本信息汇总
         print("\n【数据维度汇总】")
         print(f"地区数：{len(regions)}")
         print(f"产业数：{len(sectors)}")
